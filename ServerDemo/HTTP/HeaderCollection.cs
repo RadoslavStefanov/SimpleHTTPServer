@@ -25,13 +25,9 @@ namespace ServerDemo.HTTP
         }
 
         public IEnumerator<Header> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        => this.headers.Values.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        => this.GetEnumerator();
     }
 }

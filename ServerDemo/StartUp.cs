@@ -1,2 +1,8 @@
-﻿var server = new ServerDemo.HttpServer("127.0.0.1", 2505);
-server.Start();
+﻿using ServerDemo;
+using ServerDemo.Responces;
+
+new HttpServer(routes=>routes
+    .MapGet("/", new TextResponse("Hello from the server!"))
+    .MapGet("/HTML", new HtmlResponse("<h1>HTML Response</h1>"))
+    .MapGet("/Redirect", new RedirectResponse("https://softuni.org/")))
+    .Start();

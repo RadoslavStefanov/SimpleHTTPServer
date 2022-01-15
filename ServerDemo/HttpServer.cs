@@ -49,8 +49,6 @@ namespace ServerDemo
 
                 var networkStream = connection.GetStream();
 
-                WriteResponce(networkStream, "Hello from the other side.");
-
                 var requestText = this.ReadRequest(networkStream);
 
                 Console.WriteLine(requestText);
@@ -66,18 +64,10 @@ namespace ServerDemo
 
         }
 
-        private void WriteResponce(NetworkStream networkStream, string message)
+        private void WriteResponce(NetworkStream networkStream, Response response)
         {
 
-            var contentLength = Encoding.UTF8.GetByteCount(message);
-
-            var response = $@"HTTP/1.1 200 OK
-Content-Type: text/plain; charset=UTF-8
-Content-Length: {contentLength}
-
-{message}";
-
-            var responseBytes = Encoding.UTF8.GetBytes(response);
+            var responseBytes = Encoding.UTF8.GetBytes(response.ToString());
 
             networkStream.Write(responseBytes);
 

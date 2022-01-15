@@ -28,5 +28,8 @@ namespace ServerDemo.HTTP
         public string Name { get; init; }
         public string Value { get; init; }
 
+        public override string ToString()
+        => $"{this.Name}: {this.Value}";
+
     }
 }
