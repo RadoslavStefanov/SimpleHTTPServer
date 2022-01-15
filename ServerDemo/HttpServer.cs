@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ServerDemo.HTTP;
+using ServerDemo.Routing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,12 +16,27 @@ namespace ServerDemo
         private readonly int port;
         private readonly TcpListener serverListener;
 
-        public HttpServer(string _ipAddress,int _port)
+        private readonly RoutingTable routingTable;
+
+        public HttpServer(string _ipAddress,int _port,Action<IRoutingTable> routingTableConfiguration)
         {
             ipAddress = IPAddress.Parse(_ipAddress);
             port = _port;
             serverListener = new TcpListener(ipAddress,port);
+
+            routingTableConfiguration(this.routingTable = new RoutingTable());
         }
+
+        public HttpServer(int _port, Action<IRoutingTable> routingTable)
+            :this("127.0.0.1",_port, routingTable)
+        {
+        }
+
+        public HttpServer(Action<IRoutingTable> routingTable)
+            : this(2505, routingTable)
+        {
+        }
+
 
         public void Start()
         {
@@ -38,6 +55,12 @@ namespace ServerDemo
 
                 Console.WriteLine(requestText);
 
+                var request = Request.Parse(requestText);
+
+                var response = this.routingTable.MatchRequest(request);
+
+                WriteResponce(networkStream, response);
+
                 connection.Close();
             }
 
@@ -46,14 +69,13 @@ namespace ServerDemo
         private void WriteResponce(NetworkStream networkStream, string message)
         {
 
-            var content = "Hello from the other side";
-            var contentLength = Encoding.UTF8.GetByteCount(content);
+            var contentLength = Encoding.UTF8.GetByteCount(message);
 
             var response = $@"HTTP/1.1 200 OK
 Content-Type: text/plain; charset=UTF-8
 Content-Length: {contentLength}
 
-{content}";
+{message}";
 
             var responseBytes = Encoding.UTF8.GetBytes(response);
 

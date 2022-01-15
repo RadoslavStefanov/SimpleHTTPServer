@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerDemo.HTTP;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,9 @@ namespace ServerDemo.Routing
     public interface IRoutingTable
     {
 
-
+        IRoutingTable Map(string url, Method method, Response response);
+        IRoutingTable MapGet(string url, Response response);
+        IRoutingTable MapPost(string url, Response response);
 
     }
 }
