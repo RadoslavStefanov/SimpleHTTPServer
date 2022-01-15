@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace ServerDemo.HTTP
 {
-    public class Responce
+    public class Response
     {
 
-        public Responce(StatusCode _statusCode)
+        public Response(StatusCode _statusCode)
         {
             StatusCode = _statusCode;
 
-            this.Headers.Add("Server", "My Web Server");
-            this.Headers.Add("Date", $"{DateTime.UtcNow:r}");
+            this.Headers.Add(Header.Server, "My Web Server");
+            this.Headers.Add(Header.Date, $"{DateTime.UtcNow:r}");
         }
 
         public StatusCode StatusCode { get; init; }

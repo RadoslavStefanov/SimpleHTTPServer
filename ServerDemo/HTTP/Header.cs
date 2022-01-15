@@ -9,6 +9,13 @@ namespace ServerDemo.HTTP
 {
     public class Header
     {
+
+        public const string ContentType = "ContentType";
+        public const string ContentLength = "ContentLength";
+        public const string Date = "Date";
+        public const string Location = "Location";
+        public const string Server = "Server";
+
         public Header(string _name,string _value)
         {
             Guard.AgainstNull(_name,nameof(_name));
