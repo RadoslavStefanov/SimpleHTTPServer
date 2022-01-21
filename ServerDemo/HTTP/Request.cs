@@ -13,6 +13,8 @@ namespace ServerDemo.HTTP
         public HeaderCollection Headers { get; private set; }
         public string Body { get; private set; }
 
+        public IReadOnlyDictionary<string, string> Form { get; private set; }
+
         public static Request Parse(string request)
         {
             var lines = request.Split("\r\n");
@@ -29,12 +31,15 @@ namespace ServerDemo.HTTP
 
             var body = string.Join("\r\n", bodyLines);
 
+            var form = ParseForm(headers, body);
+
             return new Request
             {
                 Method = method,
                 Url = url,
                 Headers = headers,
-                Body = body
+                Body = body,
+                Form = form
             };
         }
 
@@ -51,8 +56,8 @@ namespace ServerDemo.HTTP
         }
 
         private static HeaderCollection ParseHeaders(IEnumerable<string> headerLines)
-        { 
-            
+        {
+
             var headerCollection = new HeaderCollection();
 
             foreach (var item in headerLines)
@@ -60,10 +65,10 @@ namespace ServerDemo.HTTP
                 if (item == String.Empty)
                 { break; }
 
-                var headerParts = item.Split(':',2);
+                var headerParts = item.Split(':', 2);
 
                 if (headerParts.Length != 2)
-                { throw new InvalidDataException("Request is not valid");}
+                { throw new InvalidDataException("Request is not valid"); }
 
                 var headerName = headerParts[0];
                 var headerValue = headerParts[1];
@@ -72,6 +77,14 @@ namespace ServerDemo.HTTP
             }
 
             return headerCollection;
+        }
+
+        public static Dictionary<string, string> ParseForm(HeaderCollection headers, string body)
+        {
+            var formCollection = new Dictionary<string, string>();
+
+            if (headers.Contains(Header.ContentType) && headers[Header.ContentType] == ContentType.FormUrlEncoded)
+            { } //ON PAGE 18 FROM ROUTING DOC!
         }
     }
 }

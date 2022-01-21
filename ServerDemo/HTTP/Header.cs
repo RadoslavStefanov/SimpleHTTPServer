@@ -12,6 +12,7 @@ namespace ServerDemo.HTTP
 
         public const string ContentType = "ContentType";
         public const string ContentLength = "ContentLength";
+        public const string ContentDisposition = "Content-Disposition";
         public const string Date = "Date";
         public const string Location = "Location";
         public const string Server = "Server";
