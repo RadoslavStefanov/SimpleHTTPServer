@@ -59,6 +59,10 @@ namespace ServerDemo
 
                     var response = this.routingTable.MatchRequest(request);
 
+                    if (response.PreRenderAction != null)
+                        response.PreRenderAction(request, response);
+
+
                     await WriteResponce(networkStream, response);
 
                     connection.Close();

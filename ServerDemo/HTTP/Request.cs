@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace ServerDemo.HTTP
 {
@@ -84,7 +85,30 @@ namespace ServerDemo.HTTP
             var formCollection = new Dictionary<string, string>();
 
             if (headers.Contains(Header.ContentType) && headers[Header.ContentType] == ContentType.FormUrlEncoded)
-            { } //ON PAGE 18 FROM ROUTING DOC!
+            {
+
+                var parsedResult = ParseFormData(body);
+
+                foreach (var (name,value) in parsedResult)
+                {
+                    formCollection.Add(name, value);
+                }
+
+            }
+
+            return formCollection;
+
         }
+
+        private static Dictionary<string, string> ParseFormData(string bodyLines)
+        => HttpUtility.UrlDecode(bodyLines)
+           .Split('&')
+           .Select(part => part.Split('='))
+           .Where(part => part.Length == 2)
+           .ToDictionary(
+            part => part[0],
+            part => part[1],
+            StringComparer.InvariantCultureIgnoreCase);
+
     }
 }
