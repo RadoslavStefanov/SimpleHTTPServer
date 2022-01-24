@@ -14,7 +14,7 @@ namespace ServerDemo.Routing
 
         private readonly Dictionary<Method, Dictionary<string, Response>> routes;
 
-        public RoutingTable() => this.routes = new()
+        public RoutingTable() => this.routes = new Dictionary<Method,Dictionary<string,Response>>()
         {
             [Method.Get]= new Dictionary<string, Response>(),
             [Method.Post] = new Dictionary<string, Response>(),
