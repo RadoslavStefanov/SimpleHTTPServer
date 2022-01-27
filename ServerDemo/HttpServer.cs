@@ -62,6 +62,7 @@ namespace ServerDemo
                     if (response.PreRenderAction != null)
                         response.PreRenderAction(request, response);
 
+                    AddSession(request, response);
 
                     await WriteResponce(networkStream, response);
 
@@ -71,6 +72,20 @@ namespace ServerDemo
                 
             }
 
+        }
+
+        private static void AddSession(Request request, Response response)
+        {
+            var sessionExists = request.Session
+            .ContainsKey(Session.SessionCurrentDateKey);
+
+            if (!sessionExists)
+            {
+                request.Session[Session.SessionCurrentDateKey]
+                    = DateTime.Now.ToString();
+                response.Cookies
+                    .Add(Session.SessionCookieName, request.Session.Id);
+            }
         }
 
         private async Task WriteResponce(NetworkStream networkStream, Response response)
